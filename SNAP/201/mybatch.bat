@@ -1,0 +1,1 @@
+START lmp -in input-melt.txt

@@ -1,0 +1,33 @@
+# Initialization
+
+units		  metal
+dimension 	      3
+boundary	  f f f
+atom_style	 atomic
+
+
+# Atom Definition
+
+read_data atom_definition.txt
+
+
+# Settings
+
+pair_style tersoff/mod/c
+pair_coeff * * Au.tersoff.modc Au
+
+
+timestep         0.001
+velocity         all create 300 1551 mom yes rot yes dist gaussian
+fix              2 all nvt temp 300 300 $(100.0*dt) drag 0.0 tchain 1
+fix              3 all recenter INIT INIT INIT
+
+thermo_style custom step temp pe ke etotal enthalpy epair emol press
+thermo 100
+
+
+# Run a simulation
+
+run              10000
+
+print "All done!" 

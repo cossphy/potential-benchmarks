@@ -1,0 +1,34 @@
+# Initialization
+
+units		  real
+dimension 	      3
+boundary	  f f f
+atom_style	 charge
+
+
+# Atom Definition
+
+read_data atom_definition.txt
+mass		1 15.999
+mass		2 196.97
+
+# Settings
+
+pair_style	reax/c lmp_control
+pair_coeff	* * ffield.reax.AuO O Au 
+
+timestep         1
+velocity         all create 300 1551 mom yes rot yes dist gaussian
+fix              2 all nvt temp 300 300 $(100.0*dt) drag 0.0 tchain 1
+fix              3 all recenter INIT INIT INIT
+fix              4 all qeq/reax 1 0.0 10.0 1e-6 param.qeq
+
+thermo_style custom step temp pe ke etotal enthalpy epair emol press
+thermo 100
+
+
+# Run a simulation
+
+run              10000
+
+print "All done!" 
